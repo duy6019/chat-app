@@ -1,0 +1,27 @@
+{
+  "name": "mychatapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sacarozo/MyChatApp.git"
+  },
+  "author": "Nguyen Duy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sacarozo/MyChatApp/issues"
+  },
+  "homepage": "https://github.com/sacarozo/MyChatApp#readme",
+  "dependencies": {
+    "ejs": "^2.5.7",
+    "express": "^4.17.1",
+    "express-ejs-extend": "0.0.1",
+    "mongoose": "^5.7.1",
+    "nodemon": "^1.19.2"
+  }
+}
