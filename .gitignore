@@ -61,3 +61,5 @@ typings/
 .next
 
 seed
+
+src/public/bower_components

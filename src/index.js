@@ -2,6 +2,7 @@ const express = require('express');
 
 const ConnectDB = require('./config/connectDB');
 const configViewEngine = require('./config/viewEngine');
+const initRouters = require('./routes/web');
 
 let app = express();
 let port = 1201;
@@ -12,9 +13,8 @@ ConnectDB();
 //config view Engine
 configViewEngine(app);
 
-app.get('/',(req,res)=>{
-    res.render('auth/loginRegister');
-});
+//init router
+initRouters(app);
 
 app.listen(port,()=>{
     console.log("Listen on port : " + port);
