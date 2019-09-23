@@ -63,3 +63,5 @@ typings/
 seed
 
 src/public/bower_components
+
+.env
