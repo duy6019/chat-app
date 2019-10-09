@@ -29,6 +29,7 @@
     "express-session": "^1.15.6",
     "express-validator": "^4.3.0",
     "mongoose": "^5.7.1",
+    "nodemailer": "^6.3.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
