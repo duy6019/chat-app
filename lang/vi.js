@@ -9,14 +9,19 @@ module.exports.transError = {
     account_in_use: "Email này đã được sử dung !",
     account_removed: "Tài khoản này đã bị gỡ khỏi hệ thống , vui lòng liên hệ bộ phận hỗ trợ của chúng tôi.",
     account_not_active: "Email này đã được đăng ký nhưng chưa kích hoạt tài khoản. Vui lòng kiểm tra email hoặc liên hệ với hỗ trợ của chúng tôi.",
-    token_undefined : "Token không tồn tại!"
+    token_undefined : "Token không tồn tại!",
+    login_fail : "Sai tài khoản hoặc mật khẩu",
+    server_error:"Có lỗi phía server."
 };
 
 module.exports.transSuccess = {
     userCreated: (userEmail) => {
         return `Tài khoản <strong>${userEmail}</strong> đã được tạo , kiểm tra email để kích hoạt tài khoản.`;
     },
-    account_actived:"Kích hoạt tài khoản thành công. Hiện tại bạn có thể đăng nhập."
+    account_actived:"Kích hoạt tài khoản thành công. Hiện tại bạn có thể đăng nhập.",
+    loginSuccess : (user)=>{
+        return `Xin chào ${user}, chúc các bạn một ngày tốt lành.`
+    }
 };
 
 module.exports.transEmail = {

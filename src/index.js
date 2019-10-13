@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const connectFlash = require('connect-flash');
+const passport = require('passport');
 
 const ConnectDB = require('./config/connectDB');
 const configViewEngine = require('./config/viewEngine');
@@ -25,6 +26,10 @@ app.use(express.urlencoded({ extended: true }));
 
 //Enable flash message
 app.use(connectFlash());
+
+//Config passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 //init router
 initRouters(app);
