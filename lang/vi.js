@@ -21,7 +21,8 @@ module.exports.transSuccess = {
     account_actived:"Kích hoạt tài khoản thành công. Hiện tại bạn có thể đăng nhập.",
     loginSuccess : (user)=>{
         return `Xin chào ${user}, chúc các bạn một ngày tốt lành.`
-    }
+    },
+    logout_success : "Đăng xuất tài khoản thành công."
 };
 
 module.exports.transEmail = {
