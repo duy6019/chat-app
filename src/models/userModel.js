@@ -32,32 +32,35 @@ let UserSchema = new Schema({
 });
 
 UserSchema.statics = {
-    creatNew(item){
+    createNew(item) {
         return this.create(item);
     },
-    findByEmail(email){
-        return this.findOne({'local.email':email}).exec();
+    findByEmail(email) {
+        return this.findOne({ 'local.email': email }).exec();
     },
-    findByToken(token){
-        return this.findOne({'local.verifyToken':token}).exec();
+    findByToken(token) {
+        return this.findOne({ 'local.verifyToken': token }).exec();
     },
-    removeById(id){
+    removeById(id) {
         return this.findByIdAndRemove(id).exec();
     },
-    verify(token){
+    verify(token) {
         return this.findOneAndUpdate(
-            {"local.verifyToken":token},
-            {"local.isActive":true,"local.verifyToken":null}
+            { "local.verifyToken": token },
+            { "local.isActive": true, "local.verifyToken": null }
         ).exec();
     },
-    findUserById(id){
+    findUserById(id) {
         return this.findById(id).exec();
+    },
+    findByFacebookUid(uid) {
+        return this.findOne({ 'facebook.uid': uid }).exec();
     }
 };
 
 UserSchema.methods = {
-    comparePassword(password){
-        return bcrypt.compare(password,this.local.password);
+    comparePassword(password) {
+        return bcrypt.compare(password, this.local.password);
     }
 };
 
