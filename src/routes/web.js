@@ -5,9 +5,11 @@ const { homeController, authController } = require('../controllers/index');
 const { authValid } = require("./../validation/index");
 const initPassportLocal = require('../controllers/passportController/local');
 const initPassportFacebook = require('../controllers/passportController/facebook');
+const initPassportGoogle = require('../controllers/passportController/google');
 //init all passport
 initPassportLocal();
 initPassportFacebook();
+initPassportGoogle();
 
 let router = express.Router();
 
@@ -30,13 +32,19 @@ let initRouters = (app) => {
         session:false
     }));
 
-    router.get("/auth/facebook",passport.authenticate("facebook",{scope:["email"]}));
+    router.get("/auth/facebook",authController.checkLoggedOut,passport.authenticate("facebook",{scope:["profile","email"]}));
 
-    router.get("/auth/facebook/callback",passport.authenticate("facebook",{
+    router.get("/auth/facebook/callback",authController.checkLoggedOut,passport.authenticate("facebook",{
         successRedirect: "/",
         failureRedirect: "/login-register",
     }));
 
+    router.get("/auth/google",authController.checkLoggedOut,passport.authenticate("google",{scope:["profile","email"]}));
+
+    router.get("/auth/google/callback",authController.checkLoggedOut,passport.authenticate("google",{
+        successRedirect: "/",
+        failureRedirect: "/login-register",
+    }));
     return app.use("/", router);
 }
 module.exports = initRouters;
