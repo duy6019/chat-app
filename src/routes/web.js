@@ -29,7 +29,7 @@ let initRouters = (app) => {
         failureRedirect: "/login-register",
         successFlash: true,
         failureFlash: true,
-        session:false
+        session:true
     }));
 
     router.get("/auth/facebook",authController.checkLoggedOut,passport.authenticate("facebook",{scope:["profile","email"]}));
