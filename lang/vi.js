@@ -11,7 +11,9 @@ module.exports.transError = {
     account_not_active: "Email này đã được đăng ký nhưng chưa kích hoạt tài khoản. Vui lòng kiểm tra email hoặc liên hệ với hỗ trợ của chúng tôi.",
     token_undefined : "Token không tồn tại!",
     login_fail : "Sai tài khoản hoặc mật khẩu",
-    server_error:"Có lỗi phía server."
+    server_error:"Có lỗi phía server.",
+    avatar_type:"Kiểu file không hợp lệ, chỉ chấp nhận jpg & png.",
+    avatar_size:"Ảnh chỉ cho phép giới hạn 1Mb."
 };
 
 module.exports.transSuccess = {
@@ -22,7 +24,8 @@ module.exports.transSuccess = {
     loginSuccess : (user)=>{
         return `Xin chào ${user}, chúc các bạn một ngày tốt lành.`
     },
-    logout_success : "Đăng xuất tài khoản thành công."
+    logout_success : "Đăng xuất tài khoản thành công.",
+    avatar_updated : "Cập nhật ảnh đại diện thành công."
 };
 
 module.exports.transEmail = {
