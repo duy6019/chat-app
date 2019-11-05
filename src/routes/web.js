@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 
 const { homeController, authController, userController } = require('../controllers/index');
-const { authValid } = require("./../validation/index");
+const { authValid, userValid } = require("./../validation/index");
 const initPassportLocal = require('../controllers/passportController/local');
 const initPassportFacebook = require('../controllers/passportController/facebook');
 const initPassportGoogle = require('../controllers/passportController/google');
@@ -53,6 +53,8 @@ let initRouters = (app) => {
 
     //#region Put request
     router.put("/user/update-avatar", authController.checkLoggedIn, userController.updateAvatar);
+
+    router.put("/user/update-info", authController.checkLoggedIn, userValid.updateInfo, userController.updateInfo);
     //#endregion
     return app.use("/", router);
 }

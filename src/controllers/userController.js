@@ -1,9 +1,10 @@
 const multer = require('multer');
 const uuidv4 = require('uuid/v4');
 const fsExtra = require('fs-extra');
+const { validationResult } = require('express-validator/check');
 
 const { app } = require('../config/app');
-const { transError,transSuccess } = require('../../lang/vi');
+const { transError, transSuccess } = require('../../lang/vi');
 const { user } = require('../services/index')
 
 let storageAvatar = multer.diskStorage({
@@ -33,10 +34,6 @@ module.exports.updateAvatar = (req, res) => {
             }
             return res.status(500).send(error);
         }
-        
-        if (req.file == undefined){
-            return res.status(500).send("Bạn phải thay đổi thông tin trước khi cập nhật dữ liệu.");
-        }
         try {
 
             let updateUserItem = {
@@ -47,14 +44,44 @@ module.exports.updateAvatar = (req, res) => {
             let userUpdate = await user.updateUser(req.user._id, updateUserItem);
 
             //Remove old avatar
-            await fsExtra.remove(`${app.avatar_directory}/${userUpdate.avatar}`); 
+            await fsExtra.remove(`${app.avatar_directory}/${userUpdate.avatar}`);
             let result = {
-                message:transSuccess.avatar_updated,
-                imageSrc : `/images/users/${req.file.filename}`
+                message: transSuccess.user_avatar_updated,
+                imageSrc: `/images/users/${req.file.filename}`
             }
             return res.status(200).send(result);
-        } catch(error){
+        } catch (error) {
             return res.status(500).send(error)
         }
     });
+};
+
+module.exports.updateInfo = async (req, res) => {
+    let errorArr = "";
+    let validationError = validationResult(req);
+    if (!validationError.isEmpty()) {
+        let errors = Object.values(validationError.mapped());
+        errors.forEach(item => {
+            errorArr = errorArr + item.msg;
+        });
+        console.log(errorArr);
+        return res.status(500).send(errorArr);
+    }
+    try {
+        let updateUserItem = req.body;
+        if (Object.keys(updateUserItem).length === 0) {
+            let result = {
+                message: transSuccess.user_info_updated
+            }
+            return res.status(500).send(result);
+        }
+        updateUserItem.updateAt = Date.now();
+        await user.updateUser(req.user._id, updateUserItem);
+        let result = {
+            message: transSuccess.user_info_updated
+        }
+        return res.status(200).send(result);
+    } catch (error) {
+        return res.status(500).send(error)
+    }
 };
