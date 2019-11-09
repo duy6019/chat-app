@@ -37,7 +37,6 @@ module.exports.register = (email, gender, password, protocol, host) => {
       .then(success=>{
         resolve(transSuccess.userCreated(user.local.email));
       }).catch(async error=>{
-        console.log(error);
         await UserModel.removeById(user._id);
         reject(transEmail.send_failer);
       });
