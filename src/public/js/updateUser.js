@@ -2,6 +2,31 @@ let userAvatar = null;
 let userInfo = {};
 let originAvartarSrc = null;
 let origiUserInfo = {};
+let userUpdatePassword = {};
+
+function callLogout() {
+    let timerInterval;
+    Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Tự động đăng xuất sau 5s.",
+        html: "Thời gian: <strong></strong>",
+        timer: 5000,
+        onBeforeOpen: () => {
+            Swal.showLoading();
+            timerInterval = setInterval(() => {
+                Swal.getContent().querySelector("strong").textContent = Math.ceil(Swal.getTimerLeft()/1000);
+            }, 1000);
+        },
+        onClose:()=>{
+            clearInterval(timerInterval);
+        }
+    }).then(result=>{
+        $.get("/logout",function(){
+            location.reload();
+        });
+    });
+}
 
 function updateUserInfo() {
     $("#input-change-avatar").bind("change", function () {
@@ -60,6 +85,47 @@ function updateUserInfo() {
     $("#input-change-phone").bind("change", function () {
         userInfo.phone = $(this).val();
     });
+
+    $("#input-change-current-password").bind("change", function () {
+        let currentPassword = $(this).val();
+        let regexPassword = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$/);
+        if (!regexPassword.test(currentPassword)) {
+            alertify.notify("Mật khẩu chứa ít nhất 8 ký tự bao gồm chữ hoa , chữ thường và chữ số !", "error", 5);
+            $(this).val(null);
+            delete userUpdatePassword.currentPassword;
+            return false;
+        }
+        userUpdatePassword.currentPassword = currentPassword;
+    });
+
+    $("#input-change-new-password").bind("change", function () {
+        let newPassword = $(this).val();
+        let regexPassword = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$/);
+        if (!regexPassword.test(newPassword)) {
+            alertify.notify("Mật khẩu chứa ít nhất 8 ký tự bao gồm chữ hoa , chữ thường và chữ số !", "error", 5);
+            $(this).val(null);
+            delete userUpdatePassword.newPassword;
+            return false;
+        }
+        userUpdatePassword.newPassword = newPassword;
+    });
+
+    $("#input-change-confirm-password").bind("change", function () {
+        let confirmPassword = $(this).val();
+        if (!userUpdatePassword.newPassword) {
+            alertify.notify("Bạn chưa nhập mật khẩu mới.", "error", 5);
+            $(this).val(null);
+            delete userUpdatePassword.confirmPassword;
+            return false;
+        }
+        if (confirmPassword !== userUpdatePassword.newPassword) {
+            alertify.notify("Nhập lại mật khẩu chưa chính xác.", "error", 5);
+            $(this).val(null);
+            delete userUpdatePassword.confirmPassword;
+            return false;
+        }
+        userUpdatePassword.confirmPassword = confirmPassword;
+    });
 }
 
 function callUpdateUserAvatar() {
@@ -108,13 +174,44 @@ function callUpdateUserInfo() {
         },
         error: function (error) {
             //Display error
-            let errarr = error.responseText.split('.');
-            for (var i = 0; i < errarr.length-1; i++) {
+            let errarr = error.responseText.split(".");
+            for (var i = 0; i < errarr.length - 1; i++) {
                 alertify.notify(errarr[i], "error", 7);
             }
             //alertify.notify(error.responseText, "error", 7);
             //Reset all
             $("#input-btn-cancel-update-user").click();
+        }
+    });
+}
+
+function callUpdateUserPassword() {
+    $.ajax({
+        url: "/user/update-password",
+        type: "put",
+        data: userUpdatePassword,
+        success: function (result) {
+            //Display success
+            $(".user-modal-password-alert-success").find("span").text(result.message);
+            $(".user-modal-password-alert-success").css("display", "block");
+            //Update originUserInfo
+            origiUserInfo = Object.assign(origiUserInfo, userInfo);
+
+            //Update username at navbar
+            $("#navbar-username").text(origiUserInfo.username);
+
+            //Reser all
+            $("#input-btn-cancel-update-user-password").click();
+
+            //Log out after change password
+            callLogout();
+        },
+        error: function (error) {
+            //Display error
+            $(".user-modal-password-alert-error").find("span").text(error.responseText);
+            $(".user-modal-password-alert-error").css("display", "block");
+            //Reset all
+            $("#input-btn-cancel-update-user-password").click();
         }
     });
 }
@@ -157,4 +254,36 @@ $(document).ready(function () {
         $("#input-change-address").val(origiUserInfo.address);
         $("#input-change-phone").val(origiUserInfo.phone);
     })
+
+    $("#input-btn-update-user-password").bind("click", function () {
+
+        if (!userUpdatePassword.currentPassword || !userUpdatePassword.newPassword || !userUpdatePassword.confirmPassword) {
+            alertify.notify("Bạn phải điền đầy đủ thông tin trước khi cập nhật dữ liệu.", "error", 5);
+            return false;
+        }
+        Swal.fire({
+            title: "Bạn có chắc muốn thay đổi mật khẩu?",
+            text: "Bạn không thể hoàn tác quá trình này!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#2ECC71",
+            cancelButtonColor: "#ff7675",
+            confirmButtonText: "Xác nhận",
+            cancelButtonText: "Hủy"
+        }).then((result) => {
+            if (!result.value) {
+                $("#input-btn-cancel-update-user-password").click();
+                return false;
+            }
+            callUpdateUserPassword();
+        })
+    });
+
+    $("#input-btn-cancel-update-user-password").bind("click", function () {
+        userUpdatePassword = {};
+        $("#input-change-current-password").val(null);
+        $("#input-change-new-password").val(null);
+        $("#input-change-confirm-password").val(null);
+    });
+
 });

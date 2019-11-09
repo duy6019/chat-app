@@ -64,4 +64,6 @@ seed
 
 src/public/bower_components
 
+src/openssl
+
 .env

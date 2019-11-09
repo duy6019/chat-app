@@ -1,11 +1,11 @@
 {
     "name": "awesome-chat",
-    "homepage": "https://trungquandev.com",
+    "homepage": "https://.com",
     "authors": [
-      "trungquan17 <quanlightning17@gmail.com>"
+      
     ],
     "description": "Manage frontend libraries.",
-    "main": "src/server.js",
+    "main": "src/index.js",
     "license": "",
     "private": true,
     "ignore": [
