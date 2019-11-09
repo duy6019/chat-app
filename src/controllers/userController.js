@@ -64,7 +64,6 @@ module.exports.updateInfo = async (req, res) => {
         errors.forEach(item => {
             errorArr = errorArr + item.msg;
         });
-        console.log(errorArr);
         return res.status(500).send(errorArr);
     }
     try {
@@ -79,6 +78,30 @@ module.exports.updateInfo = async (req, res) => {
         await user.updateUser(req.user._id, updateUserItem);
         let result = {
             message: transSuccess.user_info_updated
+        }
+        return res.status(200).send(result);
+    } catch (error) {
+        return res.status(500).send(error)
+    }
+};
+
+module.exports.updatePassword = async (req, res) => {
+    let errorArr = [];;
+    let validationError = validationResult(req);
+    if (!validationError.isEmpty()) {
+        let errors = Object.values(validationError.mapped());
+        errors.forEach(element=>{
+            errorArr.push(element.msg);
+        });
+        return res.status(500).send(errorArr);
+    } 
+    try {
+        let updateUserItem = req.body;
+        await user.updatePassword(req.user._id,updateUserItem);
+        updateUserItem.updateAt = Date.now();
+        await user.updateUser(req.user._id, updateUserItem);
+        let result = {
+            message: transSuccess.user_password_updated
         }
         return res.status(200).send(result);
     } catch (error) {

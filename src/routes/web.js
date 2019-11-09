@@ -55,6 +55,8 @@ let initRouters = (app) => {
     router.put("/user/update-avatar", authController.checkLoggedIn, userController.updateAvatar);
 
     router.put("/user/update-info", authController.checkLoggedIn, userValid.updateInfo, userController.updateInfo);
+
+    router.put("/user/update-password", authController.checkLoggedIn, userValid.updatePassword, userController.updatePassword);
     //#endregion
     return app.use("/", router);
 }

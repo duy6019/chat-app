@@ -17,7 +17,9 @@ module.exports.transError = {
     login_fail: "Sai tài khoản hoặc mật khẩu",
     server_error: "Có lỗi phía server.",
     avatar_type: "Kiểu file không hợp lệ, chỉ chấp nhận jpg & png.",
-    avatar_size: "Ảnh chỉ cho phép giới hạn 1Mb."
+    avatar_size: "Ảnh chỉ cho phép giới hạn 1Mb.",
+    user_current_password_failed:"Mật khẩu nhập vào không chính xác.",
+    user_confirm_password_failed:"Nhập lại mật khẩu không chính xác."
 };
 
 module.exports.transSuccess = {
@@ -30,7 +32,8 @@ module.exports.transSuccess = {
     },
     logout_success: "Đăng xuất tài khoản thành công.",
     user_avatar_updated:"Cập nhật ảnh đại diện thành công",
-    user_info_updated: "Cập nhật thông tin người dùng thành công."
+    user_info_updated: "Cập nhật thông tin người dùng thành công.",
+    user_password_updated: "Cập nhật mật khẩu thành công."
 };
 
 module.exports.transEmail = {
