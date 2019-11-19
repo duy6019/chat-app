@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 
-const { homeController, authController, userController } = require('../controllers/index');
+const { homeController, authController, userController, contactController } = require('../controllers/index');
 const { authValid, userValid } = require("./../validation/index");
 const initPassportLocal = require('../controllers/passportController/local');
 const initPassportFacebook = require('../controllers/passportController/facebook');
@@ -37,6 +37,8 @@ let initRouters = (app) => {
         successRedirect: "/",
         failureRedirect: "/login-register",
     }));
+
+    router.get("/contact/find-users/:keyword",authController.checkLoggedIn,contactController.findUserContact);
     //#endregion
 
     //#region Post request
@@ -49,6 +51,8 @@ let initRouters = (app) => {
         failureFlash: true,
         session: true
     }));
+
+    router.post("/contact/add-new",authController.checkLoggedIn,contactController.addNew);
     //#endregion 
 
     //#region Put request
@@ -57,6 +61,9 @@ let initRouters = (app) => {
     router.put("/user/update-info", authController.checkLoggedIn, userValid.updateInfo, userController.updateInfo);
 
     router.put("/user/update-password", authController.checkLoggedIn, userValid.updatePassword, userController.updatePassword);
+    //#endregion
+    //#region Delete request
+    router.delete("/contact/remove-request-contact",authController.checkLoggedIn,contactController.removeRequestContact);
     //#endregion
     return app.use("/", router);
 }

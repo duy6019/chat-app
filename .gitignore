@@ -67,3 +67,5 @@ src/public/bower_components
 src/openssl
 
 .env
+
+src/public/images/users
